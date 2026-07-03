@@ -10,3 +10,5 @@ wheels/
 .venv
 monesh.md
 mouryan.md
+
+.env
