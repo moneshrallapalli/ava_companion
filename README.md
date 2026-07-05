@@ -1,4 +1,4 @@
-# Ava Build Plan — Monesh & Mouryan
+# Ava Build Plan - Monesh & Mouryan
 
 You are both complete beginners to this stuff (LLMs, agents, LangGraph, vector DBs, voice/vision
 APIs). This plan assumes that. Every new concept gets a plain-English explanation before any code.
