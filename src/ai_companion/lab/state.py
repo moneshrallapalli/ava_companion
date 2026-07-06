@@ -2,4 +2,5 @@ from langgraph.graph import MessagesState
 
 class LabState(MessagesState):
 
-    pass
+    current_activity: str
+    apply_activity : bool
