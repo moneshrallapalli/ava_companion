@@ -35,6 +35,14 @@ class ScheduleContextGenerator:
             start_str, end_str = time_range.split("-")
             start = datetime.strptime(start_str,"%H:%M").time()
             end = datetime.strptime(end_str,"%H:%M").time()
-            if start <= now <= end:
+            if start > end:
+                if now >= start or now <= end:
+                    return activity
+            elif start <= now <= end:
                 return activity
         return None
+
+    @classmethod
+    def get_current_activity_description(cls):
+        activity = cls.get_current_activity()
+        return f"The current activity is {activity}. The activity is {cls.SCHEDULE[activity]}"
