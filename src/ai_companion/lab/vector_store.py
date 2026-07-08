@@ -23,7 +23,7 @@ class VectorStore:
 
     def search_memories(self, query, limit = 5):
         query_vector = self.model.encode(query).tolist()
-        results = self.client.search(
+        results = self.client.query_points(
             collection_name =  self.COLLECTION_NAME,
             query_vector = query_vector,
             limit = limit,
