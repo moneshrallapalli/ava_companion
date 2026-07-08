@@ -21,7 +21,21 @@ class VectorStore:
         payload = {"text": text, **metadata}
         self.client.upsert(collection_name= self.COLLECTION_NAME, points= [PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload  )])
 
-    
+    def search_memories(self, query, limit = 5):
+        query_vector = self.model.encode(query).tolist()
+        results = self.client.search(
+            collection_name =  self.COLLECTION_NAME,
+            query_vector = query_vector,
+            limit = limit,
+        )
+        return [
+            {
+                "text": hit.payload["text"],
+                "score": hit.score,
+
+            }
+            for hit in results
+        ]
 
     def __init__(self):
         self.client = QdrantClient(url=settings.QDRANT_URL, api_key = settings.QDRANT_API_KEY)
