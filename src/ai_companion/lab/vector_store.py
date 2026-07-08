@@ -1,7 +1,8 @@
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 from ai_companion.settings import settings
-from qdrant_client.models import VectorParams
+from qdrant_client.models import VectorParams, PointStruct
+import uuid
 
 class VectorStore:
     COLLECTION_NAME="ava_memories"
@@ -12,6 +13,16 @@ class VectorStore:
                 collection_name=self.COLLECTION_NAME,
                 vectors_config = VectorParams(size= vector_size, distance = "Cosine")
             )
+    
+    def store_memory(self, text, metadata=None):
+        if metadata is None:
+            metadata = {}
+        vector = self.model.encode(text).tolist()
+        payload = {"text": text, **metadata}
+        self.client.upsert(collection_name= self.COLLECTION_NAME, points= [PointStruct(id=str(uuid.uuid4()), vector=vector, payload=payload  )])
+
+    
+
     def __init__(self):
         self.client = QdrantClient(url=settings.QDRANT_URL, api_key = settings.QDRANT_API_KEY)
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
