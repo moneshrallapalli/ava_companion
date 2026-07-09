@@ -30,8 +30,8 @@ Rules:
 4. Preserve the meaning without adding or inferring information.
 5. If multiple independent facts are present, combine them into a single concise sentence separated by semicolons.
 6. If no durable personal fact exists, return:
-   {{}
-   
+   {{
+
      "is_important": false,
      "formatted_memory": null
    }}
