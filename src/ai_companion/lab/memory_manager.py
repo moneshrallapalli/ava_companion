@@ -5,6 +5,10 @@ from ai_companion.lab.vector_store import VectorStore
 from ai_companion.settings import settings
 from langchain_groq import ChatGroq
 from ai_companion.lab.prompts import MEMORY_ANALYSIS_PROMPT
+from langchain_core.messages import BaseMessage
+from datetime import datetime
+import uuid
+
 class MemoryAnalysis(BaseModel):
     is_important: bool = Field(..., description = "is the message important enough to be remembered?")
     formatted_memory: Optional[str] = Field(..., description = "a concise and structured summary of the message that captures the key information and context")
@@ -19,6 +23,23 @@ class MemoryManager:
         """Analyze a message and return a structured analysis of its importance and content"""
         prompt = MEMORY_ANALYSIS_PROMPT.format(message = message)
         return await self.llm.ainvoke(prompt)
+
+    async def extract_and_store_memories(self, message: BaseMessage) -> None:
+        if message.type != "human": return
+        analysis = await self._analyze_memory(message.content)
+
+        if analysis.is_important and analysis.formatted_memory:
+            similar = self.vector_store.find_similar_memory(analysis.formatted_memory)
+            if similar:
+                return
+            self.vector_store.store_memory(
+                text = analysis.formatted_memory,
+                metadata = {"id": str(uuid.uuid4()), "timestamp": datetime.now().isoformat()}
+            )
+
+
+
+
 
 
 
