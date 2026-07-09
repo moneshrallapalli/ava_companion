@@ -37,6 +37,18 @@ class MemoryManager:
                 metadata = {"id": str(uuid.uuid4()), "timestamp": datetime.now().isoformat()}
             )
 
+    def get_relevant_memories(self, context: str) -> List[str]:
+        results = self.vector_store.search_memories(context, limit = 3)
+        return [result["text"] for result in results]
+
+    def format_memories_for_prompt(self, memories: List[str]) -> str:
+        if not memories:
+            return ""
+        return "\n".join(f"- {memory}" for memory in memories)
+
+def get_memoty_manager() -> MemoryManager:
+    return MemoryManager()
+    
 
 
 
