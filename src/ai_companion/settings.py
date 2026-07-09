@@ -6,4 +6,5 @@ class Settings(BaseSettings):
     TEXT_MODEL_NAME: str = "llama-3.3-70b-versatile"
     QDRANT_URL: str
     QDRANT_API_KEY : str
+    SMALL_TEXT_MODEL_NAME: str = "gemma2-9b-it"
 settings = Settings()
