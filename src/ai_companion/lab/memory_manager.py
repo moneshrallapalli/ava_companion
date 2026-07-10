@@ -46,9 +46,9 @@ class MemoryManager:
             return ""
         return "\n".join(f"- {memory}" for memory in memories)
 
-def get_memoty_manager() -> MemoryManager:
+def get_memory_manager() -> MemoryManager:
     return MemoryManager()
-    
+
 
 
 
