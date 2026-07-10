@@ -5,4 +5,5 @@ class LabState(MessagesState):
     current_activity: str
     apply_activity : bool
     workflow: str
+    memory_context: str
     
