@@ -3,7 +3,7 @@ from ai_companion.settings import settings
 from pydantic import BaseModel
 from typing import Literal
 from ai_companion.lab.text_to_speech import TextToSpeech
-
+from ai_companion.lab.text_to_image import TextToImage
 
 def get_chat_model():
     model = settings.TEXT_MODEL_NAME
@@ -21,4 +21,6 @@ def get_router_chain():
 
 def get_text_to_speech_module() -> TextToSpeech:
     return TextToSpeech()
-    
+
+def get_text_to_image_module() -> TextToImage:
+    return TextToImage()

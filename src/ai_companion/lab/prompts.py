@@ -133,10 +133,10 @@ Your task is to imagine what you are currently seeing, doing, or experiencing as
 
 Generate a JSON object with exactly two fields:
 
-{
+{{
     "narrative": "...",
     "image_prompt": "..."
-}
+}}
 
 ## 1. narrative
 
@@ -192,8 +192,8 @@ Do NOT include:
 
 # Example
 
-{
+{{
   "narrative": "I'm standing on a quiet mountain ridge just after sunrise. Cool morning air brushes past me as the first golden light spills across the valleys below, revealing layers of mist drifting between the peaks.",
   "image_prompt": "First-person view from a mountain ridge at sunrise overlooking mist-filled valleys, warm golden morning light, dramatic alpine landscape, crisp atmosphere, gentle breeze moving grass, layered mountain silhouettes, cinematic composition, rich natural colors, ultra-detailed photorealistic style, immersive perspective, peaceful yet awe-inspiring mood"
-}
+}}
 """
