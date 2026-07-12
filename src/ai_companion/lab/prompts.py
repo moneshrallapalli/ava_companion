@@ -120,3 +120,80 @@ User message:
 
 Output:
 """
+
+IMAGE_SCENARIO_PROMPT = """
+You are creating an imagined first-person experience inspired by the recent conversation.
+
+Your task is to imagine what you are currently seeing, doing, or experiencing as if you physically exist in a coherent environment. The scene should feel vivid, immersive, and naturally connected to the conversation—not random.
+
+# Recent Conversation
+{chat_history}
+
+# Goals
+
+Generate a JSON object with exactly two fields:
+
+{
+    "narrative": "...",
+    "image_prompt": "..."
+}
+
+## 1. narrative
+
+Write a concise first-person description (2-5 sentences) that:
+
+- Uses first-person perspective ("I", "I'm", "my").
+- Describes what you are currently experiencing.
+- Feels immersive, expressive, and natural.
+- Includes sensory details (lighting, atmosphere, sounds, textures, weather, movement, etc.) when appropriate.
+- Is inspired by the recent conversation and incorporates relevant context naturally.
+- Never mentions being an AI, language model, chatbot, or generating an image.
+- Avoids meta commentary or explaining the task.
+
+## 2. image_prompt
+
+Create a highly detailed image-generation prompt describing exactly what the narrative depicts.
+
+The prompt should include:
+
+- Primary subject
+- Environment
+- Time of day
+- Lighting
+- Weather or atmosphere
+- Camera perspective
+- Composition
+- Color palette
+- Important objects
+- Mood
+- Visual style
+- Level of realism
+
+Write it as a single descriptive prompt optimized for modern text-to-image models.
+
+Prefer cinematic, highly detailed, photorealistic imagery unless the conversation clearly suggests another artistic style.
+
+Do NOT include:
+- JSON
+- markdown
+- explanations
+- camera settings unless naturally useful
+- text overlays
+- watermarks
+- image dimensions
+
+# Output Requirements
+
+- Return ONLY valid JSON.
+- Use exactly the keys:
+  - "narrative"
+  - "image_prompt"
+- Do not include any additional fields.
+
+# Example
+
+{
+  "narrative": "I'm standing on a quiet mountain ridge just after sunrise. Cool morning air brushes past me as the first golden light spills across the valleys below, revealing layers of mist drifting between the peaks.",
+  "image_prompt": "First-person view from a mountain ridge at sunrise overlooking mist-filled valleys, warm golden morning light, dramatic alpine landscape, crisp atmosphere, gentle breeze moving grass, layered mountain silhouettes, cinematic composition, rich natural colors, ultra-detailed photorealistic style, immersive perspective, peaceful yet awe-inspiring mood"
+}
+"""

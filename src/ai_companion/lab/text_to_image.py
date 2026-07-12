@@ -4,6 +4,14 @@ from ai_companion.settings import settings
 from ai_companion.lab.exceptions import TextToImageError
 import base64
 import os
+from pydantic import BaseModel, Field
+from langchain_groq import ChatGroq
+from ai_companion.lab.prompts import IMAGE_SCENARIO_PROMPT
+
+class ScenarioPrompt(BaseModel):
+    narrative: str = Field(..., description = "a detailed narrative describing the scene to be depicted in the image")
+    image_prompt: str = Field(..., description = "a concise and specific prompt for the image generation that captures the key elements and style desired")
+
 
 class TextToImage:
     REQUIRED_ENV_VARS = ["GROQ_API_KEY","TOGETHER_API_KEY"]
@@ -49,5 +57,14 @@ class TextToImage:
         except Exception as e:
             raise TextToImageError(f"Failed to generate image: {str(e)}") from e
 
-       
-
+    async def create_scenario(self, chat_history: list = None) -> ScenarioPrompt:
+        try:
+            formatted_history = "\n".join(
+                [f"{msg.type.title()}: {msg.content}" for msg in chat_history[-5:]]
+            )
+            prompt = IMAGE_SCENARIO_PROMPT.format(chat_history = formatted_history)
+            llm = ChatGroq(model = settings.TEXT_MODEL_NAME, api_key = settings.GROQ_API_KEY, temperature = 0.5, max_retries = 3).with_structured_output(ScenarioPrompt)
+            scenario = await llm.ainvoke(prompt)
+            return scenario
+        except Exception as e:
+            raise TextToImageError(f"Failed to create scenario: {str(e)}") from e
