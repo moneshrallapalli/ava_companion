@@ -4,15 +4,12 @@ from langchain_core.messages import AIMessage
 from ai_companion.lab.state import LabState
 from ai_companion.lab.nodes import conversation_node, context_injection_node, router_node
 from ai_companion.lab.nodes import memory_extraction_node, memory_injection_node
-
+from ai_companion.lab.nodes import audio_node
 # def echo_node(state:  LabState):
 # last = state["messages"][-1]
 # return {"messages":[AIMessage(content=f"echo:{last.content}")]}
 #just for now. Will be replaced with actual node.
 def image_node(state):
-    return{}
-
-def audio_node(state):
     return{}
 
 

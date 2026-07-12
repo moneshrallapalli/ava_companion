@@ -6,4 +6,5 @@ class LabState(MessagesState):
     apply_activity : bool
     workflow: str
     memory_context: str
+    audio_buffer: bytes
     

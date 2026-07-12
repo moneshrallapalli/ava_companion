@@ -1,5 +1,5 @@
 from langchain_core.messages import SystemMessage
-from ai_companion.lab.helpers import get_chat_model, get_router_chain
+from ai_companion.lab.helpers import get_chat_model, get_router_chain, get_text_to_speech_module
 from ai_companion.lab.state import LabState
 from ai_companion.lab.schedules import ScheduleContextGenerator
 from ai_companion.lab.memory_manager import get_memory_manager
@@ -43,6 +43,16 @@ async def conversation_node(state: LabState):
     response = await model.ainvoke([SystemMessage(content = system_prompt)] +state["messages"])
     return {"messages": [response]}
 
+async def audio_node(state: LabState):
+    model = get_chat_model()
+    activity = state.get("current_activity","")
+    memory_context = state.get("memory_context","")
+    system_prompt = SYSTEM_PROMPT.format(current_activity= activity, memory_context= memory_context)
+    response = await model.ainvoke([SystemMessage(content = system_prompt)] + state["messages"])
+    text_to_speech = get_text_to_speech_module()
+    audio_buffer = await text_to_speech.synthesize(response.content)
+    return{"messages": [response], "audio_buffer": audio_buffer}
+
 def context_injection_node(state: LabState):
     activity = ScheduleContextGenerator.get_current_activity()
     previous = state.get("current_activity","")
@@ -66,4 +76,5 @@ def memory_injection_node(state: LabState):
     memories = memory_manager.get_relevant_memories(recent_context)
     memory_context = memory_manager.format_memories_for_prompt(memories)
     return {"memory_context": memory_context}
+
 
