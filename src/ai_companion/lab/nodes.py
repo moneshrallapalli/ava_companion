@@ -1,8 +1,10 @@
 from langchain_core.messages import SystemMessage
-from ai_companion.lab.helpers import get_chat_model, get_router_chain, get_text_to_speech_module
+from ai_companion.lab.helpers import get_chat_model, get_router_chain, get_text_to_speech_module, get_text_to_image_module
 from ai_companion.lab.state import LabState
 from ai_companion.lab.schedules import ScheduleContextGenerator
 from ai_companion.lab.memory_manager import get_memory_manager
+import os
+from uuid import uuid4
 
 SYSTEM_PROMPT = """You are an AI companion that assists the user with their tasks.
 
@@ -52,6 +54,21 @@ async def audio_node(state: LabState):
     text_to_speech = get_text_to_speech_module()
     audio_buffer = await text_to_speech.synthesize(response.content)
     return{"messages": [response], "audio_buffer": audio_buffer}
+
+async def image_node(state: LabState):
+    text_to_image = get_text_to_image_module()
+    scenario = await text_to_image.create_scenario(state["messages"][-5:])
+    os.makedirs("generated_images", exist_ok=True)
+    image_path = f"generated_images/image_{uuid4()}.png"
+    await text_to_image.generate_image(scenario.image_prompt, image_path)
+
+    model = get_chat_model()
+    activity = state.get("current_activity","")
+    memory_context = state.get("memory_context","")
+    system_prompt = SYSTEM_PROMPT.format(current_activity=activity, memory_context= memory_context)
+    response = await model.ainvoke([SystemMessage(content=system_prompt)] + state["messages"])
+    return {"messages": [response], "image_path": image_path}
+
 
 def context_injection_node(state: LabState):
     activity = ScheduleContextGenerator.get_current_activity()

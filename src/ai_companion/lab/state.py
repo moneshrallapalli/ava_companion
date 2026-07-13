@@ -7,4 +7,5 @@ class LabState(MessagesState):
     workflow: str
     memory_context: str
     audio_buffer: bytes
+    image_path: str
     
