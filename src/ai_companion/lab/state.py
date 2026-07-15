@@ -8,4 +8,5 @@ class LabState(MessagesState):
     memory_context: str
     audio_buffer: bytes
     image_path: str
-    
+    summary: str
+

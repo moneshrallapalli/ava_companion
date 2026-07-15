@@ -12,4 +12,7 @@ class Settings(BaseSettings):
     TTS_MODEL_NAME: str = "eleven_flash_v2_5"
     TOGETHER_API_KEY: str
     TTI_MODEL_NAME: str = "black-forest-labs/FLUX.1-schnell"
+    TOTAL_MESSAGES_SUMMARY_TRIGGER : int = 20
+    TOTAL_MESSAGES_AFTER_SUMMARY : int = 5
+    
 settings = Settings()

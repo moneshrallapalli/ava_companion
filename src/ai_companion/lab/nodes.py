@@ -1,10 +1,12 @@
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, HumanMessage
+from langgraph.graph.messages import RemoveMessage
 from ai_companion.lab.helpers import get_chat_model, get_router_chain, get_text_to_speech_module, get_text_to_image_module
 from ai_companion.lab.state import LabState
 from ai_companion.lab.schedules import ScheduleContextGenerator
 from ai_companion.lab.memory_manager import get_memory_manager
 import os
 from uuid import uuid4
+from ai_companion.settings import settings
 
 SYSTEM_PROMPT = """You are an AI companion that assists the user with their tasks.
 
@@ -94,4 +96,33 @@ def memory_injection_node(state: LabState):
     memory_context = memory_manager.format_memories_for_prompt(memories)
     return {"memory_context": memory_context}
 
+async def summarize_conversation_node(state: LabState):
+    messages = state["messages"]
+    summary = state.get("summary","")
+    model = get_chat_model()
+    if summary:
+        summary_message = (
+            "This is summary of the conversation to date between Ava and the user: "
+            + summary
+            + "\n\nExtend the summary by taking into account the new messages above:"
+        )
+
+    else:
+        summary_message = (
+            "Create a summary of the conversation above between Ava and the user. "
+            "The summary must be a short description of the conversation so far, "
+            "but that captures all the relevant information shared between Ava and the user:"
+        )
+
+    messages = state["messages"]+[HumanMessage(content = summary_message)]
+    response = await model.ainvoke(messages)
+
+    delete_messages = [
+        RemoveMessage(id=m.id)
+        for m in state["messages"][:-settings.TOTAL_MESSAGES_AFTER_SUMMARY]
+
+
+    ]
+    return {"summary": response.content, "messages": delete_messages}
+    
 
