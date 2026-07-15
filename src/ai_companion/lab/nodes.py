@@ -1,5 +1,5 @@
 from langchain_core.messages import SystemMessage, HumanMessage
-from langgraph.graph.messages import RemoveMessage
+from langchain_core.messages import RemoveMessage
 from ai_companion.lab.helpers import get_chat_model, get_router_chain, get_text_to_speech_module, get_text_to_image_module
 from ai_companion.lab.state import LabState
 from ai_companion.lab.schedules import ScheduleContextGenerator
@@ -97,7 +97,7 @@ def memory_injection_node(state: LabState):
     return {"memory_context": memory_context}
 
 async def summarize_conversation_node(state: LabState):
-    messages = state["messages"]
+    
     summary = state.get("summary","")
     model = get_chat_model()
     if summary:
