@@ -14,5 +14,6 @@ class Settings(BaseSettings):
     TTI_MODEL_NAME: str = "black-forest-labs/FLUX.1-schnell"
     TOTAL_MESSAGES_SUMMARY_TRIGGER : int = 20
     TOTAL_MESSAGES_AFTER_SUMMARY : int = 5
+    ITT_MODEL_NAME: str = "meta-llama/llama-4-scout-17b-16e-instruct"
     
 settings = Settings()

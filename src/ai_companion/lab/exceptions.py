@@ -11,3 +11,7 @@ class TextToImageError(Exception):
 class SpeechToTextError(Exception):
     """Exception raised when speech to text fails"""
     pass
+
+class ImageToTextError(Exception):
+    """Exception raised when image to text fails"""
+    pass
