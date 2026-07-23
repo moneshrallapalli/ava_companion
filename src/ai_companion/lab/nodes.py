@@ -73,10 +73,10 @@ async def image_node(state: LabState):
 
 
 def context_injection_node(state: LabState):
-    activity = ScheduleContextGenerator.get_current_activity()
-    previous = state.get("current_activity","")
-    changed = activity != previous
-    return {"current_activity":activity, "apply_activity":changed}
+    schedule_context = ScheduleContextGenerator.get_current_activity() or ""
+    previous_activity = state.get("current_activity", "")
+    apply_activity = schedule_context != previous_activity
+    return {"apply_activity": apply_activity, "current_activity": schedule_context}
     
 async def router_node(state: LabState):
     chain = get_router_chain()
