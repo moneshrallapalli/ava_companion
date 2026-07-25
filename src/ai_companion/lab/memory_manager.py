@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from pydantic import BaseModel , Field
-from ai_companion.lab.vector_store import VectorStore
+from ai_companion.lab.vector_store import get_vector_store
 from ai_companion.settings import settings
 from langchain_groq import ChatGroq
 from ai_companion.lab.prompts import MEMORY_ANALYSIS_PROMPT
@@ -16,7 +16,7 @@ class MemoryAnalysis(BaseModel):
 
 class MemoryManager:
     def __init__(self):
-        self.vector_store = VectorStore()
+        self.vector_store = get_vector_store()
         self.llm = ChatGroq(model = settings.SMALL_TEXT_MODEL_NAME, api_key=settings.GROQ_API_KEY, temperature = 0.1, max_retries = 3).with_structured_output(MemoryAnalysis)
 
     async def _analyze_memory(self, message: str) -> MemoryAnalysis:
@@ -38,8 +38,8 @@ class MemoryManager:
             )
 
     def get_relevant_memories(self, context: str) -> List[str]:
-        results = self.vector_store.search_memories(context, limit = 3)
-        return [result["text"] for result in results]
+        results = self.vector_store.search_memories(context, k=3)
+        return [result.text for result in results]
 
     def format_memories_for_prompt(self, memories: List[str]) -> str:
         if not memories:
