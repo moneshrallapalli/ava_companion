@@ -2,8 +2,8 @@ from langchain_groq import ChatGroq
 from ai_companion.settings import settings
 from pydantic import BaseModel
 from typing import Literal
-from ai_companion.lab.text_to_speech import TextToSpeech
 from ai_companion.lab.text_to_image import TextToImage
+from ai_companion.lab.text_to_speech import get_text_to_speech
 
 def get_chat_model():
     model = settings.TEXT_MODEL_NAME
@@ -19,8 +19,8 @@ def get_router_chain():
     model = get_chat_model()
     return model.with_structured_output(RouterResponse)
 
-def get_text_to_speech_module() -> TextToSpeech:
-    return TextToSpeech()
+def get_text_to_speech_module():
+    return get_text_to_speech()
 
 def get_text_to_image_module() -> TextToImage:
     return TextToImage()
