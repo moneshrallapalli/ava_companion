@@ -1,5 +1,6 @@
 from functools import lru_cache
 from typing import Optional
+import re
 
 from elevenlabs import ElevenLabs, VoiceSettings
 
@@ -28,11 +29,16 @@ class TextToSpeech:
             self._client = ElevenLabs(api_key=settings.ELEVENLABS_API_KEY, timeout=10)
         return self._client
 
+    def prepare_speech_text(self, text: str) -> str:
+        """Clean LLM output for speech (strip *actions* and whitespace)."""
+        return re.sub(r"\*.*?\*", "", text).strip()
+
     async def synthesize(self, text: str) -> bytes:
-        if not text.strip():
+        speech_text = self.prepare_speech_text(text)
+        if not speech_text:
             raise TextToSpeechError("Text to synthesize cannot be empty")
 
-        if len(text) > self.MAX_TEXT_LENGTH:
+        if len(speech_text) > self.MAX_TEXT_LENGTH:
             raise TextToSpeechError(
                 f"Text to synthesize cannot be longer than {self.MAX_TEXT_LENGTH} characters"
             )
@@ -40,7 +46,7 @@ class TextToSpeech:
         try:
             audio_generator = self.client.text_to_speech.convert(
                 voice_id=settings.ELEVENLABS_VOICE_ID,
-                text=text,
+                text=speech_text,
                 model_id=settings.TTS_MODEL_NAME,
                 voice_settings=VoiceSettings(stability=0.5, similarity_boost=0.5),
             )

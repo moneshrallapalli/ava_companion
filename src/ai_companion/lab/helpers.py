@@ -1,9 +1,18 @@
+import re
+
+from langchain_core.output_parsers import StrOutputParser
 from langchain_groq import ChatGroq
-from ai_companion.settings import settings
 from pydantic import BaseModel
 from typing import Literal
+
+from ai_companion.settings import settings
 from ai_companion.lab.text_to_image import TextToImage
 from ai_companion.lab.text_to_speech import get_text_to_speech
+
+
+def remove_asterisk_content(text: str) -> str:
+    """Strip asterisk-wrapped action text (e.g. *smiles*) before TTS."""
+    return re.sub(r"\*.*?\*", "", text).strip()
 
 def get_chat_model():
     model = settings.TEXT_MODEL_NAME
@@ -21,6 +30,14 @@ def get_router_chain():
 
 def get_text_to_speech_module():
     return get_text_to_speech()
+
+
+class AsteriskRemovalParser(StrOutputParser):
+    """LangChain parser that removes asterisk actions from model output."""
+
+    def parse(self, text: str) -> str:
+        return remove_asterisk_content(super().parse(text))
+
 
 def get_text_to_image_module() -> TextToImage:
     return TextToImage()
