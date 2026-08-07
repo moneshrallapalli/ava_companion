@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from typing import Literal
 
 from ai_companion.settings import settings
-from ai_companion.lab.text_to_image import TextToImage
+from ai_companion.lab.text_to_image import get_text_to_image
 from ai_companion.lab.text_to_speech import get_text_to_speech
 
 
@@ -39,5 +39,5 @@ class AsteriskRemovalParser(StrOutputParser):
         return remove_asterisk_content(super().parse(text))
 
 
-def get_text_to_image_module() -> TextToImage:
-    return TextToImage()
+def get_text_to_image_module():
+    return get_text_to_image()

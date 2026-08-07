@@ -197,3 +197,16 @@ Do NOT include:
   "image_prompt": "First-person view from a mountain ridge at sunrise overlooking mist-filled valleys, warm golden morning light, dramatic alpine landscape, crisp atmosphere, gentle breeze moving grass, layered mountain silhouettes, cinematic composition, rich natural colors, ultra-detailed photorealistic style, immersive perspective, peaceful yet awe-inspiring mood"
 }}
 """
+
+IMAGE_ENHANCEMENT_PROMPT = """
+Enhance the given prompt using the best prompt engineering techniques such as providing context, specifying style, medium, lighting, and camera details if applicable. If the prompt requests a realistic style, the enhanced prompt should include the image extension .HEIC.
+
+# Original Prompt
+{prompt}
+
+# Objective
+**Enhance Prompt**: Add relevant details to the prompt, including context, description, specific visual elements, mood, and technical details. For realistic prompts, add '.HEIC' in the output specification.
+
+# Example
+"realistic photo of a person having a coffee" -> "photo of a person having a coffee in a cozy cafe, natural morning light, shot with a 50mm f/1.8 lens, 8425.HEIC"
+"""
