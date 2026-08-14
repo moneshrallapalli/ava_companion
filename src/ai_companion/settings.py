@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     ELEVENLABS_API_KEY: str
     ELEVENLABS_VOICE_ID: str
     TTS_MODEL_NAME: str = "eleven_flash_v2_5"
+    STT_MODEL_NAME: str = "whisper-large-v3-turbo"
     TOGETHER_API_KEY: str
     TTI_MODEL_NAME: str = "black-forest-labs/FLUX.1-schnell"
     TOTAL_MESSAGES_SUMMARY_TRIGGER : int = 20
