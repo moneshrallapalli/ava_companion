@@ -9,11 +9,16 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "aiosqlite>=0.22.1",
+    "chainlit>=2.11.1",
     "elevenlabs>=2.57.0",
+    "fastapi[standard]>=0.141.1",
     "groq>=0.37.1",
+    "httpx>=0.28.1",
     "langchain>=1.3.11",
     "langchain-groq>=1.1.3",
     "langgraph>=1.2.6",
+    "langgraph-checkpoint-sqlite>=3.1.1",
     "pydantic-settings>=2.14.2",
     "qdrant-client>=1.18.0",
     "sentence-transformers>=5.6.0",

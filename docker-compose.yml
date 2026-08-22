@@ -1,0 +1,44 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./long_term_memory:/qdrant/storage
+    restart: unless-stopped
+
+  chainlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.chainlit
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - SHORT_TERM_MEMORY_DB_PATH=/app/data/memory.db
+    volumes:
+      - ./short_term_memory:/app/data
+      - ./generated_images:/app/generated_images
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+  whatsapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - SHORT_TERM_MEMORY_DB_PATH=/app/data/memory.db
+    volumes:
+      - ./short_term_memory:/app/data
+      - ./generated_images:/app/generated_images
+    depends_on:
+      - qdrant
+    restart: unless-stopped

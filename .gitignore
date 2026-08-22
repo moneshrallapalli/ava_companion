@@ -22,3 +22,8 @@ test_audio_node.mp3
 generated_images/
 test_day14.jpg
 test_day14.png
+data/
+short_term_memory/
+long_term_memory/
+*.db
+.chainlit/
